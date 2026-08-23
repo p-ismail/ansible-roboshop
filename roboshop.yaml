@@ -35,6 +35,6 @@
       record: "{{ item.item }}-{{ env }}.{{ domain_name }}" # here mongo-dev.daws70s.online
       type: A
       ttl: 1
-      value: "{{ item.instances[0].private_ipaddress }}" # it will assign the ip address
+      value: "{{ item.instances[0].private_ip_address }}" # it will assign the ip address
       wait: true
     loop: "{{ ec2_output.results }}"
