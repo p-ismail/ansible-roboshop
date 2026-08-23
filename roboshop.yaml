@@ -5,6 +5,7 @@
     sg_id: sg-0fc300ed6d5217c2f
     ami_id: ami-0220d79f3f480ecf5
     env: dev
+    action: create
     domain_name: daws70s.online
     instances:
     - mongodb
@@ -23,10 +24,12 @@
         Name: "{{ item }}-{{ env }}"
     loop: "{{ instances }}"
     register: ec2_output
+    when: action == "create"
 
   - name: print the ec2_output
     ansible.builtin.debug:
       msg: "{{ ec2_output }}"
+    when: action == "create"
 
   - name: create r53 records
     amazon.aws.route53:
@@ -38,6 +41,7 @@
       value: "{{ item.instances[0].private_ip_address }}" # it will assign the ip address 
       wait: true
     loop: "{{ ec2_output.results }}"
+    when: action == "create"
   
   - name: create r53 records
     amazon.aws.route53:
@@ -49,4 +53,6 @@
       value: "{{ item.instances[0].public_ip_address }}" # it will assign the ip address 
       wait: true
     loop: "{{ ec2_output.results }}"
-    when: item.item == "frontend"
+    when: 
+    - item.item == "frontend"
+    - action == "create"
