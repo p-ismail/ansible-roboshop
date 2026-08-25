@@ -1,3 +1,4 @@
+# ansible-playbook -i localhost, -e "instances=['mongodb','catalogue','redis','user','cart','mysql','shipping','rabbitmq','payment','frontend']" roboshop.yaml
 - name: create ec2 and r53 records
   hosts: all
   connection: local
@@ -47,7 +48,7 @@
     amazon.aws.route53:
       state: present
       zone: "{{ domain_name }}"
-      record: " roboshop-{{ env }}.{{ domain_name }}" # here roboshop.daws70s.online 
+      record: "roboshop-{{ env }}.{{ domain_name }}" # here roboshop.daws70s.online 
       type: A
       ttl: 1
       value: "{{ item.instances[0].public_ip_address }}" # it will assign the ip address 
