@@ -41,6 +41,7 @@
       ttl: 1
       value: "{{ item.instances[0].private_ip_address }}" # it will assign the ip address 
       wait: true
+      overwrite: true
     loop: "{{ ec2_output.results }}"
     when: action == "create"
   
